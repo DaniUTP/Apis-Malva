@@ -17,6 +17,7 @@ return [
     'tokenInValid'=>'Token invalido',
     'expiredToken'=>'El token esta expirado',
     'userExist'=>'El usuario ya existe',
-    'existRol'=>'El rol ya existe'
+    'existRol'=>'El rol ya existe',
+    'existPropietario'=>'El propietario ya existe'
 ];
 ?>

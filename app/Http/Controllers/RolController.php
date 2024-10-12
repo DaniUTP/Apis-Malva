@@ -20,10 +20,8 @@ class RolController extends Controller
             if ($rol->id_rol) {
                 return CustomResponse::responseMessage('existRol', 400, $language);
             }
-
-            $rol->nombre = $request->nombre;
+            $rol->id_rol = $request->id_rol;
             $rol->save();
-
             return CustomResponse::responseMessage('saved', 200, $language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());

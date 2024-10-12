@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuariosController;
 use App\Models\Usuarios;
@@ -26,6 +27,10 @@ Route::group(
             ],function(){
             Route::post('',[RolController::class,'createRol'])->middleware('validateToken'); 
             Route::get('',[RolController::class,'listRol']); 
+        });
+
+        Route::group(['prefix'=>'personal'],function(){
+            Route::get('',[PersonalController::class,'listPersonal']);
         });
     
 });

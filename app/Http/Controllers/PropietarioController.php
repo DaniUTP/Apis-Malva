@@ -13,12 +13,12 @@ class PropietarioController extends Controller
     {
         $language = $request->query('lang');
         try {
-            
-            $propietario = new Propietario();
-            $propietario->id_usuario = $request->id_usuario;
+            $propietario = Propietario::firstOrNew(['dni' => $request->dni]);
+            if ($propietario->nombre) {
+                return CustomResponse::responseMessage('existPropietario', 400, $language);
+            }
             $propietario->nombre = $request->nombre;
-            $propietario->dni = $request->dni;
-            $propietario->email = $request->email;
+            $propietario->fecha_nacimiento = $request->fecha_nacimiento;
             $propietario->save();
 
             return CustomResponse::responseMessage('saved', 200, $language);

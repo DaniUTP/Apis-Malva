@@ -19,9 +19,10 @@ class UsuariosController extends Controller
         $language = $request->query('lang');
         try {
             $usuario=Usuarios::firstOrNew(['email'=>$request->email]);
-            if($usuario->nombre){
+            if($usuario->dni){
                 return CustomResponse::responseMessage('userExist',400,$language);
             }
+            $usuario->dni=$request->dni;
             $usuario->nombre = $request->nombre;
             $usuario->email = $request->email;
             $usuario->password = Hash::make($request->password);
