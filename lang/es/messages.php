@@ -10,5 +10,13 @@ return [
     'email' => 'El campo debe tener la estructura de email',
     'saved' => 'Se registro correctamente',
     'regex' => 'El campo no cuenta con la estructura correcta',
-    'alpha' => 'El campo debe ser solo texto'
+    'alpha' => 'El campo debe ser solo texto',
+    'badCredentials'=>'Las credenciales son incorrectas',
+    'notExist'=>'El usuario no existe',
+    'noToken'=>'No se proporciono un token',
+    'tokenInValid'=>'Token invalido',
+    'expiredToken'=>'El token esta expirado',
+    'userExist'=>'El usuario ya existe',
+    'existRol'=>'El rol ya existe'
 ];
+?>

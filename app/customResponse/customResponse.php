@@ -1,17 +1,17 @@
 <?php
 
-namespace App\customResponse;
+namespace App\CustomResponse;
 
 use Illuminate\Support\Facades\Log;
 
-class customResponse
+class CustomResponse
 {
     public static function getLanguage($lang){
         try {
             if(!$lang){
-                $language=env('APP_TRANSLATION');
+            return env('APP_TRANSLATION');
             }
-            return $language;
+            return $lang;
         } catch (\Throwable $th) {
             Log::info('Error:' . $th->getMessage());
         }
@@ -31,22 +31,23 @@ class customResponse
         }
     }
 
-    public static function responseMessage($message, $lang)
+    public static function responseMessage($message,$status ,$lang)
     {
         try {
             $language=self::getLanguage($lang);
+
             $response =trans('messages.' . $message, [], $language);
 
-            return response()->json(['Mensaje' => $response], 200);
+            return response()->json(['Mensaje' => $response], $status);
         } catch (\Throwable $th) {
             Log::info('Error:' . $th->getMessage());
         }
     }
 
-    public static function responseData($data)
+    public static function responseData($data,$status)
     {
         try {
-            return response()->json($data);
+            return response()->json($data,$status);
         } catch (\Throwable $th) {
             Log::info('Error:' . $th->getMessage());
         }

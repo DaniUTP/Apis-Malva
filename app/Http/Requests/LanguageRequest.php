@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\customResponse\customResponse;
+use App\CustomResponse\CustomResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,7 +32,7 @@ class LanguageRequest extends FormRequest
     public function messages(){
         $language=$this->query('lang');
         return [
-            'alpha'=>customResponse::responseValidation('alpha',$language)
+            'alpha'=>CustomResponse::responseValidation('alpha',$language)
         ];
     }
     

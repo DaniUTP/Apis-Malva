@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\customResponse\customResponse;
+use App\CustomResponse\CustomResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -27,9 +27,8 @@ class CreateRequest extends FormRequest
         return [
             'lang'=>'alpha',
             'nombre'=>'required|string|max:100',
-            'dni'=>'required|numeric|digits:8',
             'email'=>'required|email|max:100',
-            'contrasena'=>'required|string|min:8|max:255',
+            'password'=>'required|string|min:8|max:255',
             'id_rol'=>'required|numeric'
         ];
     }
@@ -38,13 +37,13 @@ class CreateRequest extends FormRequest
     {
          $language=$this->query('lang');
         return[
-            'alpha'=>customResponse::responseValidation('alpha',$language),
-            'required'=>customResponse::responseValidation('required',$language),
-            'string'=>customResponse::responseValidation('string',$language),
-            'numeric'=>customResponse::responseValidation('numeric',$language),
-            'max'=>customResponse::responseValidation('max',$language),
-            'digits'=>customResponse::responseValidation('digits',$language),
-            'email'=>customResponse::responseValidation('email',$language),
+            'alpha'=>CustomResponse::responseValidation('alpha',$language),
+            'required'=>CustomResponse::responseValidation('required',$language),
+            'string'=>CustomResponse::responseValidation('string',$language),
+            'numeric'=>CustomResponse::responseValidation('numeric',$language),
+            'max'=>CustomResponse::responseValidation('max',$language),
+            'digits'=>CustomResponse::responseValidation('digits',$language),
+            'email'=>CustomResponse::responseValidation('email',$language),
             ];
     }
 

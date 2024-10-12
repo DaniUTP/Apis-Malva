@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\customResponse\customResponse;
+use App\CustomResponse\CustomResponse;
 use App\Http\Requests\LanguageRequest;
 use App\Http\Requests\RolRequest;
 use App\Models\Rol;
@@ -15,13 +15,19 @@ class RolController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $rol = new Rol();
+            $rol = Rol::firstOrNew(['nombre' => $request->nombre]);
+
+            if ($rol->id_rol) {
+                return CustomResponse::responseMessage('existRol', 400, $language);
+            }
+
             $rol->nombre = $request->nombre;
             $rol->save();
-            return customResponse::responseMessage('saved', $language);
+
+            return CustomResponse::responseMessage('saved', 200, $language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
-            return customResponse::responseMessage('internalError', $language);
+            return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
 
@@ -30,10 +36,10 @@ class RolController extends Controller
         $language = $request->query('lang');
         try {
             $rol = Rol::all(['id_rol', 'nombre']);
-            return customResponse::responseData($rol);
+            return CustomResponse::responseData($rol, 200);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
-            return customResponse::responseMessage('internalError', $language);
+            return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
 }
