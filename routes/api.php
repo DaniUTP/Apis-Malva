@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\PersonalController;
+use App\Http\Controllers\ReservasController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Middleware\ValidateToken;
 use App\Models\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,7 @@ Route::group(
                 Route::post('create',[UsuariosController::class,'create']);
                 Route::post('login',[UsuariosController::class,'login']);
                 Route::get('me',[UsuariosController::class,'me'])->middleware('validateToken');
+                Route::post('update',[UsuariosController::class,'update']);
         });
         Route::group(
             [
@@ -31,6 +34,13 @@ Route::group(
 
         Route::group(['prefix'=>'personal'],function(){
             Route::get('',[PersonalController::class,'listPersonal']);
+            Route::post('',[PersonalController::class,'create']);
+        });
+
+        Route::group(['prefix'=>'reserva','middleware'=>['validateToken']],function(){
+            Route::get('',[ReservasController::class,'listReservas']);
+            Route::post('',[ReservasController::class,'create']);
+            Route::get('/usado',[ReservasController::class,'listHorariosUsados']);
         });
     
 });

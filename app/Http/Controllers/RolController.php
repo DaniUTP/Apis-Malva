@@ -16,9 +16,8 @@ class RolController extends Controller
         $language = $request->query('lang');
         try {
             $rol = Rol::firstOrNew(['nombre' => $request->nombre]);
-
             if ($rol->id_rol) {
-                return CustomResponse::responseMessage('existRol', 400, $language);
+                return CustomResponse::responseMessage('existRol', 409, $language);
             }
             $rol->id_rol = $request->id_rol;
             $rol->save();

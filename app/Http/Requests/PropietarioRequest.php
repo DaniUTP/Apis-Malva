@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\CustomResponse\CustomResponse;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PropietarioRequest extends FormRequest
 {
@@ -24,7 +27,27 @@ class PropietarioRequest extends FormRequest
         return [
            'dni'=>'required|numeric|digits:8',
            'nombre'=>'required|string|max:100',
-           ''
+           'fecha_nacimiento'=>'required|date'
         ];
+    }
+
+    public function messages(){
+        $language=$this->query('lang');
+        return [
+            'required'=>CustomResponse::responseValidation('required',$language),
+            'numeric'=>CustomResponse::responseValidation('numeric',$language),
+            'digits'=>CustomResponse::responseValidation('digits',$language),
+            'max'=>CustomResponse::responseValidation('max',$language),
+            'date'=>CustomResponse::responseValidation('date',$language)
+        ];
+    }
+    
+    public function failedValidation(Validator $validator){
+        throw new HttpResponseException(response()->json( 
+            [
+            'message' => 'error',
+            'errors' => $validator->errors()
+            ]
+            , 400));
     }
 }

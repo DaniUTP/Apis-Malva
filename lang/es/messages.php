@@ -5,7 +5,7 @@ return [
     'max' => 'El campo debe tener una longitud maxima de :attribute',
     'numeric' => 'El campo debe ser numerico',
     'min' => 'El campo debe tener una longitud minima de :attribute',
-    'digits' => 'El campo debe tener :attribute digitos',
+    'digits' => 'El campo debe tener :digits digitos',
     'internalError' => 'Ocurrio un problema,intentalo más tarde!',
     'email' => 'El campo debe tener la estructura de email',
     'saved' => 'Se registro correctamente',
@@ -18,6 +18,15 @@ return [
     'expiredToken'=>'El token esta expirado',
     'userExist'=>'El usuario ya existe',
     'existRol'=>'El rol ya existe',
-    'existPropietario'=>'El propietario ya existe'
+    'existPropietario'=>'El propietario ya existe',
+    'date'=>'El campo no tiene el formato de fecha',
+    'existPersonal'=>'El personal ya existe',
+    'notExistPersonal'=>'El personal  no existe',
+    'userNotExist'=>'El usuario no existe',
+    'updated'=>'El usuario se actualizo correctamente',
+    'offUser'=>'El usuario se ha inhabilitado',
+    'recoverPassword'=>'Se actualizo correctamente la contraseña',
+    'createdPersonal'=>'Se creo el personal correctamente',
+    'savedReserva'=>'Se guardo la reserva satisfactoriamente'
 ];
 ?>

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateRequest extends FormRequest
+class ReservaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,33 +25,32 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lang'=>'alpha',
-            'nombre'=>'required|string|max:100',
-            'email'=>'required|email|max:100',
-            'password'=>'required|string|min:8|max:255',
-            'id_rol'=>'required|numeric'
+            'dni'=>'required|numeric|digits:8',
+            'id_area'=>'required|numeric',
+            'fecha_reserva'=>'required|date',
+            'hora_inicio'=>'required|date_format:H:i',
+            'hora_fin'=>'required|date_format:H:i'
         ];
     }
 
-    public function messages()
-    {
-         $language=$this->query('lang');
-        return[
-            'alpha'=>CustomResponse::responseValidation('alpha',$language),
+    public function messages(){
+        $language=$this->query('lang');
+        return [
             'required'=>CustomResponse::responseValidation('required',$language),
-            'string'=>CustomResponse::responseValidation('string',$language),
             'numeric'=>CustomResponse::responseValidation('numeric',$language),
-            'max'=>CustomResponse::responseValidation('max',$language),
             'digits'=>CustomResponse::responseValidation('digits',$language),
-            'email'=>CustomResponse::responseValidation('email',$language),
-            ];
+            'string'=>CustomResponse::responseValidation('string',$language),
+            'date'=>CustomResponse::responseValidation('date',$language),
+            'hour'=>CustomResponse::responseValidation('hour',$language)
+        ]; 
     }
-
+    
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(
             [
-              'Mensaje'=>'Error',
-              'error'=>$validator->errors()  
-            ],400));
-        }
+                'message' => 'error',
+                'errors' => $validator->errors()
+            ]
+       , 400));
+    }
 }

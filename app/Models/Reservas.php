@@ -10,6 +10,7 @@ class Reservas extends Model
     use HasFactory;
     protected $table="reservas";
     protected $primaryKey="id_reserva";
-    protected $fillable=['id_propietario','id_area','fecha_reserva','hora_inicio','hora_fin'];
-    protected $hidden=['fecha_creacion','estado'];
+    protected $fillable=['dni','id_area','fecha_reserva','hora_inicio','hora_fin','fecha_creacion','estado'];
+    protected $hidden=[];
+    public $timestamps=false;
 }

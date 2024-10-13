@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends FormRequest
+class PersonalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,26 +25,31 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=>'required|email',
-            'password'=>'required|string'
+            'dni'=>'required|numeric|digits:8',
+            'nombre'=>'required|string|max:100',
+            'email'=>'required|email|max:100',
+            'id_rol'=>'required|numeric'
         ];
     }
 
     public function messages()
     {
-            $language=$this->query('lang');
+         $language=$this->query('lang');
         return[
             'required'=>CustomResponse::responseValidation('required',$language),
+            'string'=>CustomResponse::responseValidation('string',$language),
+            'numeric'=>CustomResponse::responseValidation('numeric',$language),
+            'max'=>CustomResponse::responseValidation('max',$language),
+            'digits'=>CustomResponse::responseValidation('digits',$language),
             'email'=>CustomResponse::responseValidation('email',$language),
-            'string'=>CustomResponse::responseValidation('string',$language)
-        ];
+            ];
     }
+
     public function failedValidation(Validator $validator){
-        throw new HttpResponseException(response()->json( 
+        throw new HttpResponseException(response()->json(
             [
-            'message' => 'error',
-            'errors' => $validator->errors()
-            ]
-             , 400));
+              'Mensaje'=>'Error',
+              'error'=>$validator->errors()  
+            ],400));
         }
 }

@@ -37,9 +37,11 @@ class LanguageRequest extends FormRequest
     }
     
     public function failedValidation(Validator $validator){
-        throw new HttpResponseException(response()->json([
-           'Mensaje'=>'Error',
-              'error'=>$validator->errors()  
-            ],400));
-    }
+        throw new HttpResponseException(response()->json(
+            [
+                'message' => 'error',
+                'errors' => $validator->errors()
+            ]
+             , 400));
+        }
 }
