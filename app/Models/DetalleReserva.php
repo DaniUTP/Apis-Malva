@@ -10,6 +10,7 @@ class DetalleReserva extends Model
     use HasFactory;
     protected $table="detallereserva";
     protected $primaryKey="id_detalle_reserva";
-    protected $fillable=['id_reserva','id_area','description'];
+    protected $fillable=['id_reserva','description'];
     protected $hidden=['fecha_creacion','estado'];
+    public $timestamps=false;
 }

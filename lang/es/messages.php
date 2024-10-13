@@ -2,9 +2,9 @@
 return [
     'required' => 'El campo es obligatorio',
     'string' => 'El campo debe ser un texto',
-    'max' => 'El campo debe tener una longitud maxima de :attribute',
+    'max' => 'El campo debe tener una longitud maxima de :max',
     'numeric' => 'El campo debe ser numerico',
-    'min' => 'El campo debe tener una longitud minima de :attribute',
+    'min' => 'El campo debe tener una longitud minima de :min',
     'digits' => 'El campo debe tener :digits digitos',
     'internalError' => 'Ocurrio un problema,intentalo más tarde!',
     'email' => 'El campo debe tener la estructura de email',

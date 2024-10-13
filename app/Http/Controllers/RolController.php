@@ -39,4 +39,16 @@ class RolController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
+
+    public function changeStatus(Request $request){
+        $language=$request->query('lang');
+        try {
+            $offRol=Rol::find($request->id_rol);
+            $offRol->estado=$request->estado;
+            $offRol->save();
+        } catch (\Throwable $th) {
+            Log::info("Error: " . $th->getMessage());
+            return CustomResponse::responseMessage('internalError', 500, $language);
+        }
+    }
 }

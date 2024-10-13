@@ -30,6 +30,8 @@ Route::group(
             ],function(){
             Route::post('',[RolController::class,'createRol'])->middleware('validateToken'); 
             Route::get('',[RolController::class,'listRol']); 
+            Route::post('update',[RolController::class,'update']);
+            Route::post('change',[RolController::class,'changeStatus']);
         });
 
         Route::group(['prefix'=>'personal'],function(){
@@ -40,7 +42,7 @@ Route::group(
         Route::group(['prefix'=>'reserva','middleware'=>['validateToken']],function(){
             Route::get('',[ReservasController::class,'listReservas']);
             Route::post('',[ReservasController::class,'create']);
-            Route::get('/usado',[ReservasController::class,'listHorariosUsados']);
+            Route::post('/disponible',[ReservasController::class,'listHorariosDisponibles']);
         });
     
 });

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\CustomResponse\CustomResponse;
 use App\Http\Requests\PropietarioRequest;
 use App\Models\Propietario;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PropietarioController extends Controller

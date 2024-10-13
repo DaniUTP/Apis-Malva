@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ReservaRequest extends FormRequest
+class ReservaHorariosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +26,7 @@ class ReservaRequest extends FormRequest
     {
         return [
             'id_area'=>'required|numeric',
-            'fecha_reserva'=>'required|date',
-            'hora_inicio'=>'required|date_format:H:i',
-            'hora_fin'=>'required|date_format:H:i',
-            'descripcion'=>'required|string|max:100'
+            'fecha_reserva'=>'required|date'
         ];
     }
 
@@ -38,14 +35,10 @@ class ReservaRequest extends FormRequest
         return [
             'required'=>CustomResponse::responseValidation('required',$language),
             'numeric'=>CustomResponse::responseValidation('numeric',$language),
-            'digits'=>CustomResponse::responseValidation('digits',$language),
-            'string'=>CustomResponse::responseValidation('string',$language),
             'date'=>CustomResponse::responseValidation('date',$language),
-            'hour'=>CustomResponse::responseValidation('hour',$language),
-            'max'=>CustomResponse::responseValidation('max',$language)
         ]; 
     }
-    
+
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(
             [
