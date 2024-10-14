@@ -10,7 +10,7 @@ class Personal extends Model
     use HasFactory;
     protected $table="personal";
     protected $primaryKey="dni";
-    protected $fillable=['dni','id_rol','nombre','email','foto'];
-    protected $hidden=['fecha_creacion','estado'];
+    protected $fillable=['dni','id_rol','nombre','email','foto','fecha_creacion','estado'];
+    protected $hidden=[];
     public $timestamps=false;
 }
