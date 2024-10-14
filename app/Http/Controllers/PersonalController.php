@@ -16,7 +16,7 @@ class PersonalController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $personal = Personal::all(['dni', 'nombre', 'email', 'id_rol', DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),'estado']);
+            $personal = Personal::all(['dni', 'nombre', 'email', 'id_rol','foto' ,DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),'estado']);
             return CustomResponse::responseData($personal, 200);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
