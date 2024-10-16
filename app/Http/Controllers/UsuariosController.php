@@ -250,7 +250,65 @@ class UsuariosController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-
+    /**
+     * @OA\Post (
+     *     path="/api/v1/auth/update",
+     *     tags={"Auth"},
+     *     summary= "Update account",
+     *     @OA\Parameter(
+     *         name="lang",
+     *         in="query",
+     *         description="Idioma",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"dni", "nombre","id_rol"},
+     *             @OA\Property(property="dni", type="number", example="12345678"),
+     *             @OA\Property(property="nombre", type="string", example="Pedro"),
+     *             @OA\Property(property="id_rol", type="number", example="1"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario se actualizo correctamente")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Cuerpo de peticion incorrecta",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario no existe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Rechazo de solicitud",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario no se encuentra activado")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Se supero el limite de peticiones",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error Interno",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
+     *         )
+     *     )
+     * )
+     */
     public function update(UpdateRequest $request)
     {
         $language = $request->query('lang');

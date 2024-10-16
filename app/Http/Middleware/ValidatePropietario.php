@@ -6,6 +6,7 @@ use App\CustomResponse\CustomResponse;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class ValidatePropietario
@@ -18,8 +19,9 @@ class ValidatePropietario
     public function handle(Request $request, Closure $next): Response
     {
         $language=$request->query('lang');
-        if(Gate::denies('propietario-only')){
-            return CustomResponse::responseMessage('noPropietario',403,$language);
+        $user=auth('sanctum')->user();
+        if($user->id_rol !=2) {
+            return CustomResponse::responseMessage('noPropietario', 403, $language);
         }
         return $next($request);
     }
