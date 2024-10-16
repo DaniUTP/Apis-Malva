@@ -13,6 +13,7 @@ return [
     'alpha' => 'El campo debe ser solo texto',
     'badCredentials'=>'Las credenciales son incorrectas',
     'notExist'=>'El usuario no existe',
+    'notActive'=>'El usuario no se encuentra activado',
     'noToken'=>'No se proporciono un token',
     'tokenInValid'=>'Token invalido',
     'expiredToken'=>'El token esta expirado',

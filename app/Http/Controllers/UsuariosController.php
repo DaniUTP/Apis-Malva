@@ -16,6 +16,60 @@ use Illuminate\Support\Facades\Log;
 
 class UsuariosController extends Controller
 {
+        /**
+     * @OA\Post (
+     *     path="/api/v1/auth/create",
+     *     tags={"Auth"},
+     *     summary="Create an account",
+     *     @OA\Parameter(
+     *         name="lang",
+     *         in="query",
+     *         description="Idioma",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"nombre","dni","email","password","id_rol"},
+     *             @OA\Property(property="nombre", type="string", example="Daniel"),
+     *             @OA\Property(property="dni", type="number", example="74112299"),
+     *             @OA\Property(property="email", type="string", example="aldanagerardo24@gmail.com"),
+     *             @OA\Property(property="password", type="string", example="12345678"),
+     *             @OA\Property(property="id_rol", type="number", example="1")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se registro correctamente"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=409,
+     *         description="Conflicto por un usuario existente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario ya existe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Se supero el limite de peticiones",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error Interno",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
+     *         )
+     *     )
+     * )
+     */
     public function create(CreateRequest $request)
     {
         $language = $request->query('lang');
@@ -37,7 +91,71 @@ class UsuariosController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-
+    /**
+     * @OA\Post (
+     *     path="/api/v1/auth/login",
+     *     tags={"Auth"},
+     *     summary= "Login",
+     *     @OA\Parameter(
+     *         name="lang",
+     *         in="query",
+     *         description="Idioma",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", example="aldanagerardo24@gmail.com"),
+     *             @OA\Property(property="password", type="string", example="12345678")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token", type="string", example="1|a54fds45fa4554f45adgssGADG5S4GSF54GS5FG4SFGSF")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Cuerpo de peticion incorrecta",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario no existe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="No autorizado",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Rechazo de solicitud",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario no se encuentra activado")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Se supero el limite de peticiones",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error Interno",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
+     *         )
+     *     )
+     * )
+     */
     public function login(LoginRequest $request)
     {
         $language = $request->query('lang');
@@ -67,6 +185,52 @@ class UsuariosController extends Controller
         }
     }
 
+    /**
+     * @OA\Get (
+     *     path="/api/v1/auth/me",
+     *     tags={"Auth"},
+     *     summary="Return the user information",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="lang",
+     *         in="query",
+     *         description="Idioma",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="dni", type="number", example="12345678"),
+     *             @OA\Property(property="id_rol", type="number", example="1"),
+     *             @OA\Property(property="nombre", type="string", example="Daniel"),
+     *             @OA\Property(property="phone", type="string", example="123456789"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Token invalido",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Token invalido")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=409,
+     *         description="Se supero el limite de peticiones",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error Interno",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
+     *         )
+     *     )
+     * )
+     */
     public function me(LanguageRequest $request)
     {
         $language = $request->query('lang');

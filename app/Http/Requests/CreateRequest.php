@@ -27,6 +27,7 @@ class CreateRequest extends FormRequest
         return [
             'lang'=>'alpha',
             'nombre'=>'required|string|max:100',
+            'dni'=>'required|numeric',
             'email'=>'required|email|max:100',
             'password'=>'required|string|min:8|max:255',
             'id_rol'=>'required|numeric'

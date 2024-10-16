@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\ReservasController;
 use App\Http\Controllers\RolController;
@@ -51,6 +52,13 @@ Route::group(
             Route::get('',[ReservasController::class,'listReservas']);
             Route::post('',[ReservasController::class,'create']);
             Route::post('/disponible',[ReservasController::class,'listHorariosDisponibles']);
+        });
+
+        Route::group([
+            'prefix'=>'area',
+            'middleware'=>['validateToken']
+        ],function(){
+            Route::get('',[AreaController::class,'listArea']);
         });
     
 });
