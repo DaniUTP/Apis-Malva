@@ -205,18 +205,26 @@ class UsuariosController extends Controller
      *             @OA\Property(property="dni", type="number", example="12345678"),
      *             @OA\Property(property="id_rol", type="number", example="1"),
      *             @OA\Property(property="nombre", type="string", example="Daniel"),
-     *             @OA\Property(property="phone", type="string", example="123456789"),
+     *             @OA\Property(property="email", type="string", example="aldanagerardo24@gmail.com"),
+     *             @OA\Property(property="estado", type="number", example="1"),
      *         )
      *     ),
      *     @OA\Response(
      *         response=401,
-     *         description="Token invalido",
+     *         description="Credenciales invalidas",
      *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Token invalido")
+     *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
      *         )
      *     ),
      *     @OA\Response(
-     *         response=409,
+     *         response=401,
+     *         description="Credenciales invalidas",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=429,
      *         description="Se supero el limite de peticiones",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")

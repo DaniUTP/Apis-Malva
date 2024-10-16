@@ -305,21 +305,25 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "name": {
+                                        "dni": {
+                                            "type": "number",
+                                            "example": "12345678"
+                                        },
+                                        "id_rol": {
+                                            "type": "number",
+                                            "example": "1"
+                                        },
+                                        "nombre": {
                                             "type": "string",
                                             "example": "Daniel"
-                                        },
-                                        "last_name": {
-                                            "type": "string",
-                                            "example": "Aldana"
                                         },
                                         "email": {
                                             "type": "string",
                                             "example": "aldanagerardo24@gmail.com"
                                         },
-                                        "phone": {
-                                            "type": "string",
-                                            "example": "123456789"
+                                        "estado": {
+                                            "type": "number",
+                                            "example": "1"
                                         }
                                     },
                                     "type": "object"

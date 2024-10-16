@@ -12,7 +12,7 @@ class Usuarios extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
     protected $table="usuarios";
     protected $primaryKey="dni";
-    protected $fillable=['dni','id_rol','nombre','email','estado','password'];
-    protected $hidden=['fecha_creacion'];
+    protected $fillable=['dni','id_rol','nombre','email','estado'];
+    protected $hidden=['password','fecha_creacion'];
     public $timestamps=false;
 }

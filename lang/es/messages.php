@@ -22,6 +22,7 @@ return [
     'existPropietario'=>'El propietario ya existe',
     'date'=>'El campo no tiene el formato de fecha',
     'existPersonal'=>'El personal ya existe',
+    'noPropietario'=>'El propietario solo tiene acceso',
     'notExistPersonal'=>'El personal  no existe',
     'userNotExist'=>'El usuario no existe',
     'updated'=>'El usuario se actualizo correctamente',

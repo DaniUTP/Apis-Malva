@@ -50,7 +50,7 @@ Route::group(
                 'middleware'=>['validateToken']
             ],function(){
             Route::get('',[ReservasController::class,'listReservas']);
-            Route::post('',[ReservasController::class,'create']);
+            Route::post('',[ReservasController::class,'create'])->middleware('validatePropietario');
             Route::post('/disponible',[ReservasController::class,'listHorariosDisponibles']);
         });
 
