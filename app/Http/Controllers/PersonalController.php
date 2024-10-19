@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CustomResponse\CustomResponse;
 use App\Http\Requests\LanguageRequest;
 use App\Http\Requests\PersonalRequest;
+use App\Http\Requests\StatusPersonalRequest;
 use App\Models\Personal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class PersonalController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $personal = Personal::all(['dni', 'nombre', 'email', 'id_rol','foto' ,DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),'estado']);
+            $personal = Personal::all(['dni', 'nombre', 'email', 'id_rol', 'foto', DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'estado']);
             return CustomResponse::responseData($personal, 200);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
@@ -36,25 +37,41 @@ class PersonalController extends Controller
             $personal->email = $request->email;
             $personal->id_rol = $request->id_rol;
             $personal->save();
-            return CustomResponse::responseMessage('createdPersonal',200,$language);
+            return CustomResponse::responseMessage('createdPersonal', 200, $language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         $language = $request->query('lang');
         try {
-            $personal=Personal::find($request->dni);
-            if(!$personal){
-                return CustomResponse::responseMessage('notExistPersonal',400,$language);
+            $personal = Personal::find($request->dni);
+            if (!$personal) {
+                return CustomResponse::responseMessage('notExistPersonal', 400, $language);
             }
-            $personal->nombre=$request->nombre;
-            $personal->email=$request->email;
-            $personal->foto=$request->foto;
-            $personal->id_rol=$request->id_rol;
+            $personal->nombre = $request->nombre;
+            $personal->email = $request->email;
+            $personal->foto = $request->foto;
+            $personal->id_rol = $request->id_rol;
             $personal->save();
-            return CustomResponse::responseMessage('updated',200,$language);
+            return CustomResponse::responseMessage('updated', 200, $language);
+        } catch (\Throwable $th) {
+            Log::info("Error: " . $th->getMessage());
+            return CustomResponse::responseMessage('internalError', 500, $language);
+        }
+    }
+
+    public function changeStatus(LanguageRequest $request)
+    {
+        $language = $request->query('lang');
+        try {
+            $personalLogin=auth('sanctum')->user();
+            $personal = Personal::find($personalLogin->id_personal);
+            $personal->estado = $request->estado;
+            $personal->save();
+            return CustomResponse::responseMessage('updated', 200, $language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

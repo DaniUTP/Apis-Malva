@@ -7,6 +7,7 @@ use App\Http\Requests\CreateRequest;
 use App\Http\Requests\LanguageRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RecoverPasswordRequest;
+use App\Http\Requests\StatusRequest;
 use App\Http\Requests\UpdateRequest;
 use App\Models\Usuarios;
 use Carbon\Carbon;
@@ -313,10 +314,8 @@ class UsuariosController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $usuario = Usuarios::find($request->dni);
-            if (!$usuario) {
-                return CustomResponse::responseMessage('userNotExist', 400, $language);
-            }
+            $usuarioLogin=auth('sanctum')->user();
+            $usuario = Usuarios::find($usuarioLogin->dni);
             $usuario->nombre = $request->nombre;
             $usuario->id_rol = $request->id_rol;
             $usuario->save();
@@ -342,14 +341,13 @@ class UsuariosController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language); 
         }
     }
-    public function offUser(LanguageRequest $request){
-            $language=$request->query('lang');
+    public function changeStatus(StatusRequest $request){
+        $language=$request->query('lang');
         try {
-             $user=auth('sanctum')->user();
-             $offUser=Usuarios::find($user->id_usuario);
-             $offUser->estado=0;
-             $offUser->save();
-             return CustomResponse::responseMessage('offUser',200,$language);
+            $usuario=auth('sanctum')->user();
+            $foundUser=Usuarios::find($usuario->id_usuario);
+            $foundUser->estado=$request->estado;
+            $foundUser->save();
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

@@ -29,6 +29,8 @@ return [
     'offUser'=>'El usuario se ha inhabilitado',
     'recoverPassword'=>'Se actualizo correctamente la contraseña',
     'createdPersonal'=>'Se creo el personal correctamente',
-    'savedReserva'=>'Se guardo la reserva satisfactoriamente'
+    'savedReserva'=>'Se guardo la reserva satisfactoriamente',
+    'in'=>'El estado debe estar en el rango de :in',
+    'savedArea'=>'El area ha sido creada correctamente'
 ];
 ?>
