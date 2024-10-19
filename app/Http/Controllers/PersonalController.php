@@ -17,27 +17,21 @@ class PersonalController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $personal = Personal::all(['dni', 'nombre', 'email', 'id_rol', 'foto', DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'estado']);
+            $personal = Personal::join('usuarios','usuarios.dni','=','personal.dni')
+                        ->where('usuarios.estado',1)
+                        ->where('personal.estado',1)
+                        ->get(['personal.dni', 'personal.nombre','usuarios.email','personal.id_rol', 'personal.foto', DB::raw('DATE_FORMAT(personal.fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'personal.estado']);
             return CustomResponse::responseData($personal, 200);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-    public function create(PersonalRequest $request)
-    {
+    public function foundPersonal(Request $request){
         $language = $request->query('lang');
         try {
-
-            $personal = Personal::firstOrNew(['dni' => $request->dni]);
-            if ($personal->nombre) {
-                return CustomResponse::responseMessage('existPersonal', 409, $language);
-            }
-            $personal->nombre = $request->nombre;
-            $personal->email = $request->email;
-            $personal->id_rol = $request->id_rol;
-            $personal->save();
-            return CustomResponse::responseMessage('createdPersonal', 200, $language);
+            $personal=Personal::where('dni',$request->dni)->first(['foto','dni','nombre','id_rol',DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),'estado']);
+            return CustomResponse::responseData($personal,200);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

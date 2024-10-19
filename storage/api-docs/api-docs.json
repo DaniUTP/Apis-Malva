@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:8000"
+            "url": "http://192.168.1.42:9002"
         }
     ],
     "paths": {
@@ -332,14 +332,14 @@
                         }
                     },
                     "401": {
-                        "description": "Token invalido",
+                        "description": "Credenciales inválidas",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Token invalido"
+                                            "example": "Las credenciales son incorrectas"
                                         }
                                     },
                                     "type": "object"
@@ -347,7 +347,144 @@
                             }
                         }
                     },
-                    "409": {
+                    "429": {
+                        "description": "Se superó el límite de peticiones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Se superó el límite de peticiones"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error Interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ocurrió un error, inténtelo nuevamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/update": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Update account",
+                "operationId": "0b120923acde0fb808767e2384a89890",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "description": "Idioma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "dni",
+                                    "nombre",
+                                    "id_rol"
+                                ],
+                                "properties": {
+                                    "dni": {
+                                        "type": "number",
+                                        "example": "12345678"
+                                    },
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Pedro"
+                                    },
+                                    "id_rol": {
+                                        "type": "number",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El usuario se actualizo correctamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cuerpo de peticion incorrecta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El usuario no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Rechazo de solicitud",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El usuario no se encuentra activado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
                         "description": "Se supero el limite de peticiones",
                         "content": {
                             "application/json": {
@@ -379,12 +516,118 @@
                             }
                         }
                     }
-                },
-                "security": [
+                }
+            }
+        },
+        "/api/v1/auth/recover": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "recover password",
+                "operationId": "f9e1d3d8af3cde409449c603a8b49715",
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "name": "lang",
+                        "in": "query",
+                        "description": "Idioma",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
-                ]
+                ],
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "dni",
+                                    "new_password"
+                                ],
+                                "properties": {
+                                    "dni": {
+                                        "type": "number",
+                                        "example": "12345678"
+                                    },
+                                    "new_password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exitoso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Se actualizo correctamente la contraseña"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cuerpo de peticion incorrecta",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "El usuario no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Se supero el limite de peticiones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Se supero el limite de peticiones"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error Interno",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Ocurrio un error,intentelo nuevamente."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },

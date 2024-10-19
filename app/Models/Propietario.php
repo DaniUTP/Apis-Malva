@@ -10,7 +10,7 @@ class Propietario extends Model
     use HasFactory;
     protected $table="propietario";
     protected $primarykey="dni";
-    protected $fillable=['nombre','fecha_nacimiento'];
+    protected $fillable=['nombre','foto'];
     protected $hidden=['fecha_creacion','estado'];
-    public $timestamp=false;
+    public $timestamps=false;
 }

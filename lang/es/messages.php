@@ -26,6 +26,7 @@ return [
     'notExistPersonal'=>'El personal  no existe',
     'userNotExist'=>'El usuario no existe',
     'updated'=>'El usuario se actualizo correctamente',
+    'disabled'=>'El usuario se desactivo correctamente',
     'offUser'=>'El usuario se ha inhabilitado',
     'recoverPassword'=>'Se actualizo correctamente la contraseña',
     'createdPersonal'=>'Se creo el personal correctamente',

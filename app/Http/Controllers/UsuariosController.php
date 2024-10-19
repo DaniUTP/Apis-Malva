@@ -9,8 +9,11 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RecoverPasswordRequest;
 use App\Http\Requests\StatusRequest;
 use App\Http\Requests\UpdateRequest;
+use App\Models\Personal;
+use App\Models\Propietario;
 use App\Models\Usuarios;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -85,7 +88,22 @@ class UsuariosController extends Controller
             $usuario->password = Hash::make($request->password);
             $usuario->id_rol = $request->id_rol;
             $usuario->save();
-
+            if($request->id_rol==1 || $request->id_rol==3 || $request->id_rol==4){
+            $personal=new Personal();
+            $personal->dni=$request->dni;
+            $personal->nombre = $request->nombre;
+            $personal->email = $request->email;
+            $personal->foto="https://acortar.link/MgMSdO";
+            $personal->id_rol = $request->id_rol;
+            $personal->save();
+            }
+            else{
+               $propietario=new Propietario();
+               $propietario->dni=$request->dni;
+               $propietario->nombre=$request->nombre;
+               $propietario->foto="https://acortar.link/z3jFXF";
+               $propietario->save();
+            }
             return CustomResponse::responseMessage('saved', 200, $language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
@@ -186,60 +204,53 @@ class UsuariosController extends Controller
         }
     }
 
-    /**
-     * @OA\Get (
-     *     path="/api/v1/auth/me",
-     *     tags={"Auth"},
-     *     summary="Return the user information",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *         name="lang",
-     *         in="query",
-     *         description="Idioma",
-     *         required=false,
-     *         @OA\Schema(type="string")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Exitoso",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="dni", type="number", example="12345678"),
-     *             @OA\Property(property="id_rol", type="number", example="1"),
-     *             @OA\Property(property="nombre", type="string", example="Daniel"),
-     *             @OA\Property(property="email", type="string", example="aldanagerardo24@gmail.com"),
-     *             @OA\Property(property="estado", type="number", example="1"),
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Credenciales invalidas",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Credenciales invalidas",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=429,
-     *         description="Se supero el limite de peticiones",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Error Interno",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
-     *         )
-     *     )
-     * )
-     */
+/**
+ * @OA\Get (
+ *     path="/api/v1/auth/me",
+ *     tags={"Auth"},
+ *     summary="Return the user information",
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Parameter(
+ *         name="lang",
+ *         in="query",
+ *         description="Idioma",
+ *         required=false,
+ *         @OA\Schema(type="string")
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Exitoso",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="dni", type="number", example="12345678"),
+ *             @OA\Property(property="id_rol", type="number", example="1"),
+ *             @OA\Property(property="nombre", type="string", example="Daniel"),
+ *             @OA\Property(property="email", type="string", example="aldanagerardo24@gmail.com"),
+ *             @OA\Property(property="estado", type="number", example="1")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=401,
+ *         description="Credenciales inválidas",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Las credenciales son incorrectas")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=429,
+ *         description="Se superó el límite de peticiones",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Se superó el límite de peticiones")
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=500,
+ *         description="Error Interno",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="message", type="string", example="Ocurrió un error, inténtelo nuevamente.")
+ *         )
+ *     )
+ * )
+ */
     public function me(LanguageRequest $request)
     {
         $language = $request->query('lang');
@@ -325,7 +336,57 @@ class UsuariosController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-
+    /**
+     * @OA\Post (
+     *     path="/api/v1/auth/recover",
+     *     tags={"Auth"},
+     *     summary= "recover password",
+     *     @OA\Parameter(
+     *         name="lang",
+     *         in="query",
+     *         description="Idioma",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"dni", "new_password"},
+     *             @OA\Property(property="dni", type="number", example="12345678"),
+     *             @OA\Property(property="new_password", type="string", example="123456")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Exitoso",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se actualizo correctamente la contraseña")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Cuerpo de peticion incorrecta",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="El usuario no existe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=429,
+     *         description="Se supero el limite de peticiones",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Se supero el limite de peticiones")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Error Interno",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Ocurrio un error,intentelo nuevamente.")
+     *         )
+     *     )
+     * )
+     */
     public function recoverPassword(RecoverPasswordRequest $request){
             $language=$request->query("lang");
         try {
@@ -341,13 +402,16 @@ class UsuariosController extends Controller
             return CustomResponse::responseMessage('internalError', 500, $language); 
         }
     }
-    public function changeStatus(StatusRequest $request){
-        $language=$request->query('lang');
+    public function changeStatus(Request $request){
+            $language=$request->query('lang');
         try {
-            $usuario=auth('sanctum')->user();
-            $foundUser=Usuarios::find($usuario->id_usuario);
-            $foundUser->estado=$request->estado;
+            $foundUser=Usuarios::find($request->dni);
+            $foundUser->estado=0;
             $foundUser->save();
+            $foundPersonal=Personal::find($request->dni);
+            $foundPersonal->estado=0;
+            $foundPersonal->save();
+            return CustomResponse::responseMessage('disabled',200,$language);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

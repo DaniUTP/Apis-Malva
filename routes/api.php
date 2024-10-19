@@ -21,7 +21,8 @@ Route::group(
                 Route::post('/login',[UsuariosController::class,'login']);
                 Route::get('/me',[UsuariosController::class,'me'])->middleware('validateToken');
                 Route::post('/update',[UsuariosController::class,'update'])->middleware('validateToken');
-                Route::post('/status',[UsuariosController::class,'changeStatus'])->middleware('validateToken');
+                Route::post('/recover',[UsuariosController::class,'recoverPassword']);
+                Route::post('/status',[UsuariosController::class,'changeStatus']);
         });
         Route::group(
             [
@@ -34,15 +35,13 @@ Route::group(
 
         Route::group(
             [
-                'prefix'=>'personal',
-                'middleware'=>['validateToken']
+                'prefix'=>'personal'
             ],function(){
-            Route::get('/',[PersonalController::class,'listPersonal']);
-            Route::post('/',[PersonalController::class,'create']);
-            Route::post('/update',[PersonalController::class,'update']);
-            Route::post('/status',[PersonalController::class,'changeStatus']);
+            Route::get('/',[PersonalController::class,'listPersonal'])->middleware('validateToken');
+            Route::post('/update',[PersonalController::class,'update'])->middleware('validateToken');
+            Route::get('personal/found/{dni}',[PersonalController::class,'foundPersonal']);
         });
-
+       
         Route::group(
             [
                 'prefix'=>'reserva',
