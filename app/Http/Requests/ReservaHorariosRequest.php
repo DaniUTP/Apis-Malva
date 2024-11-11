@@ -6,6 +6,7 @@ use App\CustomResponse\CustomResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Crypt;
 
 class ReservaHorariosRequest extends FormRequest
 {
@@ -38,7 +39,14 @@ class ReservaHorariosRequest extends FormRequest
             'date'=>CustomResponse::responseValidation('date',$language),
         ]; 
     }
-
+    public function prepareForValidation(){
+        try {
+            $data=json_decode(Crypt::encryptString($this->getContent()),true);
+        } catch (\Throwable $th) {
+            $data=json_decode($this->getContent(),true);
+        }
+         $this->merge($data);
+    }
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(
             [

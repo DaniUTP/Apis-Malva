@@ -16,22 +16,25 @@ class PersonalController extends Controller
     public function listPersonal(LanguageRequest $request)
     {
         $language = $request->query('lang');
+        $encript = $request->query('encr');
         try {
-            $personal = Personal::join('usuarios','usuarios.dni','=','personal.dni')
-                        ->where('usuarios.estado',1)
-                        ->where('personal.estado',1)
-                        ->get(['personal.dni', 'personal.nombre','usuarios.email','personal.id_rol', 'personal.foto', DB::raw('DATE_FORMAT(personal.fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'personal.estado']);
-            return CustomResponse::responseData($personal, 200);
+            $personal = Personal::join('usuarios', 'usuarios.dni', '=', 'personal.dni')
+                ->where('usuarios.estado', 1)
+                ->where('personal.estado', 1)
+                ->get(['personal.dni', 'personal.nombre', 'usuarios.email', 'personal.id_rol', 'personal.foto', DB::raw('DATE_FORMAT(personal.fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'personal.estado']);
+            return CustomResponse::responseData($personal, 200, $encript);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);
         }
     }
-    public function foundPersonal(Request $request){
+    public function foundPersonal(Request $request)
+    {
         $language = $request->query('lang');
+        $encript = $request->query('encr');
         try {
-            $personal=Personal::where('dni',$request->dni)->first(['foto','dni','nombre','id_rol',DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),'estado']);
-            return CustomResponse::responseData($personal,200);
+            $personal = Personal::where('dni', $request->dni)->first(['foto', 'dni', 'nombre', 'id_rol', DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'), 'estado']);
+            return CustomResponse::responseData($personal, 200, $encript);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);
@@ -61,8 +64,7 @@ class PersonalController extends Controller
     {
         $language = $request->query('lang');
         try {
-            $personalLogin=auth('sanctum')->user();
-            $personal = Personal::find($personalLogin->id_personal);
+            $personal = Personal::find($request->dni);
             $personal->estado = $request->estado;
             $personal->save();
             return CustomResponse::responseMessage('updated', 200, $language);

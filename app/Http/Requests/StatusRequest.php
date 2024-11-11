@@ -6,6 +6,7 @@ use App\CustomResponse\CustomResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Crypt;
 
 class StatusRequest extends FormRequest
 {
@@ -25,16 +26,23 @@ class StatusRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'estado'=>'required|integer|in:0,1'
+            'dni'=>'required|integer'
         ];
     }
     public function messages(){
         $language=$this->query('lang');
         return[
             'required'=>CustomResponse::responseValidation('required',$language),
-            'numeric'=>CustomResponse::responseValidation('numeric',$language),
-            'in'=>CustomResponse::responseValidation('in',$language)
+            'integer'=>CustomResponse::responseValidation('integer',$language)
         ];
+    }
+    public function prepareForValidation(){
+        try {
+            $data=json_decode(Crypt::encryptString($this->getContent()),true);
+        } catch (\Throwable $th) {
+            $data=json_decode($this->getContent(),true);
+        }
+         $this->merge($data);
     }
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(

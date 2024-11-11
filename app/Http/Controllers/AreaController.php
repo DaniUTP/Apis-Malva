@@ -14,9 +14,10 @@ class AreaController extends Controller
     public function listArea(LanguageRequest $request)
     { 
         $language = $request->query('lang');
+        $encript=$request->query('encr');
         try {
             $area=Area::all(['id_area','nombre_area']);
-            return CustomResponse::responseData($area,200);
+            return CustomResponse::responseData($area,200,$encript);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

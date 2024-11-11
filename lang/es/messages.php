@@ -32,6 +32,8 @@ return [
     'createdPersonal'=>'Se creo el personal correctamente',
     'savedReserva'=>'Se guardo la reserva satisfactoriamente',
     'in'=>'El estado debe estar en el rango de :in',
-    'savedArea'=>'El area ha sido creada correctamente'
+    'savedArea'=>'El area ha sido creada correctamente',
+    'saveReceipt'=>'El recibo ha sido registrado correctamente',
+    'onlyOwner'=>'Solo los propietarios pueden loguearse con red social'
 ];
 ?>

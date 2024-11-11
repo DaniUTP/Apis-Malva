@@ -7,10 +7,92 @@
     },
     "servers": [
         {
-            "url": "http://192.168.1.42:9002"
+            "url": "http://localhost:8000"
         }
     ],
     "paths": {
+        "/api/v1/upload": {
+            "post": {
+                "tags": [
+                    "Image Upload"
+                ],
+                "summary": "Carga de imagen",
+                "description": "Carga de imagen",
+                "operationId": "2d08932d4d3ae908f6ef29a35f6e64db",
+                "parameters": [
+                    {
+                        "name": "lang",
+                        "in": "query",
+                        "description": "Language parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "encr",
+                        "in": "query",
+                        "description": "Encryption flag",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Image file to upload",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "description": "Image file to upload",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "url": {
+                                            "description": "URL of the uploaded image",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "internalError"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/create": {
             "post": {
                 "tags": [
@@ -54,6 +136,10 @@
                                     "email": {
                                         "type": "string",
                                         "example": "aldanagerardo24@gmail.com"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "https://res.cloudinary.com/dly4rnmgh/image/upload/v1730668603/imagenes/ckboys2cdnapznjb0zsl.png"
                                     },
                                     "password": {
                                         "type": "string",
@@ -642,6 +728,10 @@
         }
     },
     "tags": [
+        {
+            "name": "Image Upload",
+            "description": "Image Upload"
+        },
         {
             "name": "Auth",
             "description": "Auth"

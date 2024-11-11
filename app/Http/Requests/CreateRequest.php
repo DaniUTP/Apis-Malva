@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\CustomResponse\CustomResponse;
+use App\Models\Usuarios;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -48,6 +49,13 @@ class CreateRequest extends FormRequest
             ];
     }
 
+    public function passedValidation(){
+        $language=$this->query('lang');
+        $usuario = Usuarios::firstWhere('email',$this->email);
+        if ($usuario) {
+            return throw new HttpResponseException(CustomResponse::responseMessage('userExist', 409, $language));
+        }
+    }
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(
             [

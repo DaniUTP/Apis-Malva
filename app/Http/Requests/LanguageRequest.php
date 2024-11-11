@@ -6,6 +6,7 @@ use App\CustomResponse\CustomResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Crypt;
 
 class LanguageRequest extends FormRequest
 {
@@ -35,7 +36,6 @@ class LanguageRequest extends FormRequest
             'alpha'=>CustomResponse::responseValidation('alpha',$language)
         ];
     }
-    
     public function failedValidation(Validator $validator){
         throw new HttpResponseException(response()->json(
             [
