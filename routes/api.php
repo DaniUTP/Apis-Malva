@@ -64,6 +64,7 @@ Route::group(
             'middleware'=>['validateToken']
         ],function(){
             Route::get('/',[AreaController::class,'listArea']);
+            Route::get('/{id}',[AreaController::class,'findArea']);
             Route::post('/',[AreaController::class,'create']);
         });
         Route::group(['prefix'=>'servicios'],function(){
@@ -81,7 +82,7 @@ Route::group(
                 Route::get('/auth/callback-google', [SocialController::class, 'handleGoogleCallback']);
                 Route::get('auth/facebook', [SocialController::class, 'redirectToFacebook']);
                 Route::get('auth/facebook/callback', [SocialController::class, 'handleFacebookCallback']);
-                Route::post('',[SocialController::class,'social']);
+                Route::post('/',[SocialController::class,'social']);
             });
             Route::group(['prefix'=>'upload'],function(){
                 Route::post('/',[UploadImageController::class,'uploadImage'])->middleware('validateToken');

@@ -28,21 +28,9 @@ class SocialController extends Controller
     
     public function handleFacebookCallback(Request $request)
 {
-    // Manejo del estado (opcional, dependiendo de tu implementación)
-    $state = $request->input('state');
-
     try {
-        // Obtén el usuario de Facebook
         $user = Socialite::driver('facebook')->user();
-
-        // El accessToken también se puede obtener desde el objeto de usuario
-        $accessToken = $user->token;
-
-        // Aquí puedes manejar el usuario y el accessToken según sea necesario
-        // Por ejemplo, guardarlo en la base de datos, iniciar sesión al usuario, etc.
-
-        // Para depurar, puedes imprimir el accessToken
-        dd($accessToken); // Muestra el accessToken en la pantalla
+        dd($user);
     } catch (Throwable $e) {
         // Manejo de errores en caso de que falle la obtención del usuario
         return response()->json(['error' => 'Error al intentar obtener el usuario de Facebook: ' . $e->getMessage()], 500);

@@ -13,4 +13,7 @@ class Reservas extends Model
     protected $fillable=['dni','id_area','fecha_reserva','hora_inicio','hora_fin','fecha_creacion','estado'];
     protected $hidden=[];
     public $timestamps=false;
+    public function area(){
+       return  $this->belongsTo(Area::class,'id_area');
+    }
 }

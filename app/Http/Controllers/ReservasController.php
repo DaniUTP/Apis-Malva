@@ -22,19 +22,34 @@ class ReservasController extends Controller
         try {
             $usuario = auth('sanctum')->user();
             $where = [];
-            if (!$usuario->id_rol = 1) {
+            if (!$usuario->id_rol == 1) {
                 $where = ['dni' => $usuario->dni];
             }
-            $reservas = Reservas::where($where)
+            $reservas = Reservas::with(['area'=>function($query){
+                $query->where('estado',1)
+                ->select('id_area','nombre_area');
+             }])->where($where)
                 ->where(DB::raw('CONCAT(fecha_reserva," ",hora_fin)'), '>', DB::raw('NOW()'))
-                ->get([
-                    'id_reserva',
-                    DB::raw('DATE_FORMAT(fecha_reserva,"%d/%m/%Y") AS fecha_reserva'),
-                    'hora_inicio',
-                    'hora_fin',
-                    DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),
-                    'estado'
-                ]);
+                ->select('id_reserva',
+                        'id_area',
+                        DB::raw('DATE_FORMAT(fecha_reserva,"%d/%m/%Y") AS fecha_reserva'),
+                        'hora_inicio',
+                        'hora_fin',
+                        DB::raw('DATE_FORMAT(fecha_creacion,"%d/%m/%Y") AS fecha_creacion'),
+                        'estado'
+                        )
+                ->get()->map(function($value){
+                    return 
+                    [
+                    'id_reserva'=>$value->id_reserva,    
+                    'area'=>$value->area->nombre_area,
+                    'fecha_reserva'=>$value->fecha_reserva,
+                    'hora_inicio'=>$value->hora_inicio,
+                    'hora_fin'=>$value->hora_fin,
+                    'fecha_creacion'=>$value->fecha_creacion,
+                    'estado'=>$value->estado==1?'Pendiente':'Vencida'
+                    ];
+                });
             return CustomResponse::responseData($reservas, 200, $encript);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());

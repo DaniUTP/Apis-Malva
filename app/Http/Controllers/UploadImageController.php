@@ -7,6 +7,7 @@ use Cloudinary\Api\Upload\UploadApi;
 use Cloudinary\Configuration\Configuration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UploadImageController extends Controller
 {
@@ -67,12 +68,10 @@ class UploadImageController extends Controller
             $language=$request->query('lang');
             $encript=$request->query('encr');
         try {
-            Configuration::instance(env('URL_API_IMAGE'));
-            $upload = new UploadApi();
-            $originalName=pathinfo($request->file('image')->getClientOriginalName(),PATHINFO_FILENAME);
+            $originalName=$request->file('image')->getClientOriginalName();
             $image = $request->file('image')->getRealpath();
-            $uploadImage = $upload->upload($image, ['folder' => 'imagenes','public_id'=>$originalName,'format' => 'webp']);
-            return CustomResponse::responseData(['url'=>$uploadImage['url']],200,$encript);
+            $url=url(Storage::disk('public')->putFileAs('/imagenes',$image,$originalName));
+            return CustomResponse::responseData(['url'=>$url],200,$encript);
         } catch (\Throwable $th) {
             Log::info("Error: " . $th->getMessage());
             return CustomResponse::responseMessage('internalError', 500, $language);

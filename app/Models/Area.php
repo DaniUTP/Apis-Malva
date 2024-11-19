@@ -12,4 +12,8 @@ class Area extends Model
     protected $primaryKey="id_area";
     protected $fillable=['id_edificio','nombre_area'];
     protected $hidden=['fecha_creacion','estado'];
+    public function reservas()
+    {
+        return $this->hasMany(Reservas::class,'id_area');
+    }
 }
